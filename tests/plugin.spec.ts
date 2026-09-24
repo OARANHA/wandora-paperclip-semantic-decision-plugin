@@ -152,6 +152,26 @@ describe("Wandora Semantic Decision plugin", () => {
     expect(questions.needs_data_or_tool_lookup.type).toBe("noul");
   });
 
+  it("does not spend provider credits when no eligible Paperclip agent exists", async () => {
+    const harness = createTestHarness({
+      manifest,
+      config: {
+        apiKeyRef: { type: "secret_ref", secretId: SECRET_ID },
+        model: "jev-latest",
+      },
+    });
+    harness.seed({ issues: [testIssue()], agents: [] });
+    await plugin.definition.setup(harness.ctx);
+    vi.spyOn(harness.ctx.secrets, "resolve").mockResolvedValue("test-api-key");
+    const fetchSpy = vi.spyOn(harness.ctx.http, "fetch");
+
+    await expect(harness.performAction("analyze-work", {
+      companyId: COMPANY_ID,
+      issueId: ISSUE_ID,
+    })).rejects.toThrow("No eligible Paperclip agents");
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
   it("fails closed before any provider call when no secret is configured", async () => {
     const harness = createTestHarness({ manifest, config: { model: "jev-latest" } });
     harness.seed({

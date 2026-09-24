@@ -264,6 +264,9 @@ async function analyzeWork(
     getAgentCandidates(ctx, companyId),
   ]);
   if (!issue) throw new Error("Issue not found in the active company");
+  if (candidates.length === 0) {
+    throw new Error("No eligible Paperclip agents are available for advisory routing.");
+  }
   if (!config.apiKeyRef) {
     throw new Error("Configure a company-scoped TypeSafe API key in the Wandora Semantic Decision plugin settings first.");
   }
