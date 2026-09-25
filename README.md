@@ -23,6 +23,21 @@ Wandora
 
 The plugin may provide bounded semantic judgments such as work routing, capability-needs assessment, missing-context signals and other typed decisions. It does not own Wandora product semantics, Paperclip lifecycle, tool execution, or external-effect authorization.
 
+## Current boundary: post-Issue advisory
+
+V1 analyzes an **existing Paperclip Issue**. The worker calls `ctx.issues.get(issueId, companyId)` before provider analysis, so this repository is not the Wandora pre-Issue fast-read admission layer.
+
+Canonical Wandora architecture now distinguishes two decision placements:
+
+```text
+request -> Wandora SemanticRouteDecision -> deterministic read OR normal agentic work
+                                             |
+                                             `-> if agentic work creates/uses a Paperclip Issue,
+                                                 this plugin may provide additive post-Issue advisory signals
+```
+
+A future pre-Issue semantic provider adapter may reuse TypeSafe/Jev patterns from this repository, but it must remain behind the Wandora-owned `SemanticDecisionProvider` contract. It must not turn this Paperclip plugin into Wandora product authority.
+
 ## Upstream
 
 The initial implementation is derived from Andrew Deng's MIT-licensed `paperclip-plugin-jev`.
