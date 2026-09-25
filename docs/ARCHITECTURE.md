@@ -73,6 +73,25 @@ This plugin may recommend that a capability is relevant, but it does not grant a
 | Agent/workflow/tool runtime | Mastra via Wandora runtime boundary |
 | Open-ended generation / reasoning | replaceable model provider |
 
+## Placement relative to Wandora semantic fast read
+
+This plugin is intentionally **post-Issue** in V1. Its current worker requires an existing Paperclip Issue and should not be used as evidence that semantic routing must occur after Issue creation.
+
+The stable product-level boundary belongs to Wandora:
+
+```text
+customer request
+  -> Wandora SemanticRouteDecision
+       -> deterministic_read -> Paperclip run + authorized Tool Gateway read
+       -> generative_reasoning -> normal Paperclip Issue/agentic path
+       -> clarify
+       -> human_review
+```
+
+When an Issue exists, this plugin may still add Paperclip-native advisory routing/triage evidence. It must not become a second execution engine, grant system or tool registry.
+
+Patterns intentionally reusable from upstream include confidence gating, minimized disclosure, idempotent decision evidence, explicit failure state and decision/executor separation. Browser automation and automatic Issue mutation remain separately qualified concerns.
+
 ## Initial qualification boundary
 
 V1 should be advisory-only.
