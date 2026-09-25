@@ -45,3 +45,26 @@ The Wandora derivative intends to qualify bounded semantic decisions for digital
 - later, capability/tool/skill recommendation where Paperclip-native authority can be reused safely.
 
 The initial Wandora slice does **not** include browser automation or automatic issue mutation.
+
+## Selected upstream patterns for Wandora
+
+The reviewed upstream baseline remains valuable as a reference implementation, but synchronization is selective.
+
+Patterns currently considered reusable:
+
+- confidence thresholds and explicit probabilities;
+- minimized disclosure to the decision provider;
+- idempotent decision processing;
+- explicit retry/failure evidence;
+- decision-only boundaries where execution is independently authorized and verified;
+- stale-snapshot rejection for future UI/browser-style capabilities.
+
+Patterns that remain excluded from the Wandora V1 plugin unless separately qualified:
+
+- `Always auto` Issue mutation;
+- browser execution automation;
+- generic agent tools that bypass Wandora capability semantics;
+- direct business-system execution from the semantic plugin;
+- any assumption that Jev is the permanent product identity.
+
+The pre-Issue fast-read path is defined canonically in `OARANHA/wandora` and should consume semantic decisions through a Wandora-owned provider-neutral contract rather than by widening this plugin into an execution authority.
